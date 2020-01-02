@@ -205,10 +205,12 @@ public func convertResponseToResult(_ response: HTTPURLResponse?, request: URLRe
             let error = MoyaError.underlying(error, response)
             return .failure(error)
         case let (_, _, .some(error)):
-            let error = MoyaError.underlying(error, nil)
+            let response = Moya.Response(statusCode: 0, data: Data(), request: request, response: response)
+            let error = MoyaError.underlying(error, response)
             return .failure(error)
         default:
-            let error = MoyaError.underlying(NSError(domain: NSURLErrorDomain, code: NSURLErrorUnknown, userInfo: nil), nil)
+            let response = Moya.Response(statusCode: 0, data: Data(), request: request, response: response)
+            let error = MoyaError.underlying(NSError(domain: NSURLErrorDomain, code: NSURLErrorUnknown, userInfo: nil), response)
             return .failure(error)
         }
 }
